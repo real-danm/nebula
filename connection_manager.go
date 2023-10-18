@@ -352,8 +352,8 @@ func (n *connectionManager) makeTrafficDecision(localIndex uint32, p, nb, out []
 			WithField("tunnelCheck", m{"state": "dead", "method": "active"}).
 			Info("Tunnel status")
 
-		if n.intf.handshakeManager.ChurnLimiter.Check(hostinfo.vpnIp) {
-			n.l.WithField("vpnIp", hostinfo.vpnIp).Info("Tunnel status; relaying with churn limiter")
+		if !n.intf.handshakeManager.LinkMonitor.Check(hostinfo.vpnIp) {
+			n.l.WithField("vpnIp", hostinfo.vpnIp).Info("Tunnel status: relaying; link Monitor didn't allow roam back to direct connection")
 			return doNothing, nil, nil
 		}
 

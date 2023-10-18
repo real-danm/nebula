@@ -120,8 +120,8 @@ func ixHandshakeStage1(f *Interface, addr *udp.Addr, via *ViaSender, packet []by
 	}
 
 	if via == nil {
-		if !f.handshakeManager.ChurnLimiter.Attempt(vpnIp) {
-			f.l.WithField("vpnIp", vpnIp).WithField("udpAddr", addr).Info("Dropping handshake, churning")
+		if !f.handshakeManager.LinkMonitor.Attempt(vpnIp) {
+			f.l.WithField("vpnIp", vpnIp).WithField("udpAddr", addr).Info("Dropping handshake due to churning or bad link data")
 			return
 		}
 	}
